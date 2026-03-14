@@ -3,7 +3,7 @@
 #include "./Socket.h"
 
 
-  Socket::Socket(family_t family, conn_type_t conn_type, protocol_t protocol = 0, port_t port, iP_t ip, Socket_type type)
+  Socket::Socket(family_t family, conn_type_t conn_type, port_t port, iP_t ip, Socket_type type, protocol_t protocol)
       : port(port), type(type)
   {
     // prepare server address
@@ -27,7 +27,7 @@
 
       // connect to the server
       if(connect(socket_client_fd, (struct sockaddr*)&socket_server_addr, sizeof(socket_server_addr)) < 0){
-        std::cerr << "Failed to connect to server/n";
+        std::cerr << "Failed to connect to server\n";
         exit(EXIT_FAILURE);
       }
     }
@@ -50,7 +50,7 @@
     if(this->type == Socket_type::client) return;
 
     socklen_t client_addr_size = sizeof(socket_client_addr);
-    
+
     // accept fills clent ip and port and returns new socket descriptor to client_fd
     socket_client_fd = accept(socket_fd, (struct sockaddr*)&socket_client_addr, &client_addr_size);
     if(socket_client_fd < 0) {
@@ -58,5 +58,5 @@
       exit(EXIT_FAILURE);
     }
 
-    std::cout << "connected by " << inet_ntoa(socket_client_addr.sin_addr) << ":" << ntohs(socket_client_addr.sin_port);
+    std::cout << "connected by " << inet_ntoa(socket_client_addr.sin_addr) << ":" << ntohs(socket_client_addr.sin_port) << "\n";
   }
